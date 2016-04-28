@@ -1,0 +1,16 @@
+enabled: false
+messages:
+    kick: '&cThe server is in maintenance mode, sorry for any inconvenience.'
+    motd: '&c&lMaintenance Mode'
+    activation: '&cServer entering maintenance mode in {{ TIME }}'
+activation:
+    countdown: 15
+    announce:
+    - '15'
+    - '5'
+    - '4'
+    - '3'
+    - '2'
+    - '1'
+whitelist:
+- ElieTGM

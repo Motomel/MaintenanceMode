@@ -1,0 +1,21 @@
+name: MaintenanceMode
+author: ElieTGM
+version: BETA 1.1
+main: me.ElieTGM.MaintenanceMode.bukkit.BukkitPlugin
+commands:
+    maintenance:
+        aliases: [mm, mmw]
+        description: Edit maintenance mode settings
+        permission: maintenance.toggle
+permissions:
+    maintenance.*:
+        default: false
+        children:
+            maintenance.toggle: true
+            maintenance.bypass: true
+    maintenance.toggle:
+        default: op
+        description: Edit maintenance mode settings
+    maintenance.bypass:
+        default: op
+        description: Bypass maintenance mode
