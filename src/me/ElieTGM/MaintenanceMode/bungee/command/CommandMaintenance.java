@@ -73,7 +73,7 @@ public class CommandMaintenance extends Command implements TabExecutor {
                     }
                     break;
                 case "cancel":
-                    if (parent.getTaskId() == -1) {
+                    if (parent.getTaskId() != -1) {
                         sender.sendMessage(MAINTENANCE_TASK_NOT_RUNNING);
                         break;
                     } else {

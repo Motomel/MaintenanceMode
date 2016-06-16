@@ -3,6 +3,7 @@ messages:
     kick: '&cThe server is in maintenance mode, sorry for any inconvenience.'
     motd: '&c&lMaintenance Mode'
     activation: '&cServer entering maintenance mode in {{ TIME }}'
+    beforemaintenancemotd: '&a&lWelcome to our server!%newline Have a seat!'
 activation:
     countdown: 15
     announce:
@@ -14,3 +15,8 @@ activation:
     - '1'
 whitelist:
 - ElieTGM
+
+serverprotocol: "Maintenance"
+VersionProtocol: true
+motdbeforemaintenance: true
+ChangeServerIconInMaintenance: true

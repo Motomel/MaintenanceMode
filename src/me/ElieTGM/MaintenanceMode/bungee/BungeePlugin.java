@@ -72,11 +72,25 @@ public class BungeePlugin extends Plugin implements Listener {
      * MOTD to display when the server is pinged
      */
     private String motd;
+    
+    /**
+     * Public static method to call within DurationFormatUtils.
+     */
+    public static BungeePlugin Maintenance;
 
     /**
      * Active task ID
      */
     private int taskId = -1;
+    
+    private boolean VersionProtocol;
+    
+    private boolean motdbeforemaintenance;
+    
+    private boolean ChangeServerIconInMaintenance;
+    
+    private String beforemotd;
+    
 
     @Override
     public void onEnable() {
@@ -92,8 +106,6 @@ public class BungeePlugin extends Plugin implements Listener {
                 getLogger().severe("Unable to load configuration values");
             }
         }
-
-        this.protocol = new ServerPing.Protocol("Maintenance", Short.MAX_VALUE);
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new CommandMaintenance(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ServerListener(this));
     }
@@ -116,6 +128,11 @@ public class BungeePlugin extends Plugin implements Listener {
             return false;
         }
 
+
+        this.ChangeServerIconInMaintenance = getConfig().getBoolean("ChangeServerIconInMaintenance");
+        this.motdbeforemaintenance = getConfig().getBoolean("motdbeforemaintenance");
+        this.VersionProtocol = getConfig().getBoolean("VersionProtocol");
+        this.protocol = new ServerPing.Protocol(getConfig().getString("serverprotocol"), Short.MAX_VALUE);
         this.countdown = getConfig().getInt("activation.countdown", 15);
         this.alert = getConfig().getIntList("activation.announce");
         this.countdownMessage = getConfig().getString("messages.activation", "&cServer entering maintenance mode in {{ TIME }}");
@@ -123,6 +140,7 @@ public class BungeePlugin extends Plugin implements Listener {
         this.whitelist = getConfig().getStringList("whitelist");
         this.message_kick = colour(getConfig().getString("messages.kick", "&cThe server is in maintenance mode, sorry for any inconvenience."));
         this.motd = colour(getConfig().getString("messages.motd", "&c&lMaintenance mode enabled!"));
+        this.beforemotd = colour(getConfig().getString("messages.beforemaintenancemotd", "&a&lWelcome to our server! %newline Have a seat!"));
         return true;
     }
 
@@ -137,17 +155,17 @@ public class BungeePlugin extends Plugin implements Listener {
 
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 if(skip) {
-                    player.disconnect(this.message_kick);
+                    player.disconnect((this.message_kick).replaceAll("%newline", "\n"));
                 } else {
                     if(!player.hasPermission("maintenance.bypass")) {
                         if (!whitelist.contains(player.getName())) {
-                            player.disconnect(this.message_kick);
+                            player.disconnect((this.message_kick).replaceAll("%newline", "\n"));
                         }
                     }
                 }
             }
         } else {
-            kick.disconnect(this.message_kick);
+            kick.disconnect((this.message_kick).replaceAll("%newline", "\n"));
         }
     }
 
@@ -244,6 +262,11 @@ public class BungeePlugin extends Plugin implements Listener {
     public String getMOTD() {
         return motd;
     }
+    
+    public String getBeforeMOTD() {
+    	
+    	return beforemotd;
+    }
 
     /**
      * Get the number of seconds counted down before maintenance mode is activated
@@ -260,6 +283,8 @@ public class BungeePlugin extends Plugin implements Listener {
     public String getCountdownMessage() {
         return this.countdownMessage;
     }
+    
+
 
     public int getTaskId() {
         return taskId;

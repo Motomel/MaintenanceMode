@@ -21,7 +21,8 @@ public class EnableRunnable implements Runnable {
         this.sender = sender;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void run() {
         int loops = parent.getCountdown();
         ProxyServer.getInstance().broadcast(Messages.colour(format(parent.getCountdownMessage(), loops)));

@@ -1,6 +1,6 @@
 name: MaintenanceMode
 author: ElieTGM
-version: BETA 1.3
+version: BETA 1.8
 main: me.ElieTGM.MaintenanceMode.bukkit.BukkitPlugin
 commands:
     maintenance:

@@ -2,12 +2,16 @@
 package me.ElieTGM.MaintenanceMode.bukkit;
 
 import me.ElieTGM.MaintenanceMode.bukkit.command.CommandMaintenance;
+import me.ElieTGM.MaintenanceMode.bukkit.event.PingProtocolEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +37,8 @@ public class BukkitPlugin extends JavaPlugin implements Listener {
      * Store the list of whitelisted players
      */
     private List<String> whitelist;
+    
+    private String protocolMessage;
 
     /**
      * Store the message players are shown when kicked
@@ -58,8 +64,17 @@ public class BukkitPlugin extends JavaPlugin implements Listener {
      * Store the countdown value
      */
     private int countdown;
+    
+    private boolean ChangeServerIconInMaintenance;
+    
+    public ProtocolManager protocolManager;
+    private PingProtocolEvent listener;
+    
+	private static BukkitPlugin instance = null; //instance static methods //
+	public static BukkitPlugin getInstance() {return instance; } //instance static methods //
 
-    @Override
+    @SuppressWarnings({ "static-access" })
+	@Override
     public void onEnable() {
         saveDefaultConfig();
 
@@ -72,6 +87,13 @@ public class BukkitPlugin extends JavaPlugin implements Listener {
         command.setTabCompleter(cmd);
 
         Bukkit.getServer().getPluginManager().registerEvents(new ServerListener(this), this);
+        
+        instance = this;
+        
+        this.protocolManager = ProtocolLibrary.getProtocolManager();
+        this.listener = new PingProtocolEvent();
+        this.listener.addPingResponsePacketListener();
+        
     }
 
     @Override
@@ -95,17 +117,17 @@ public class BukkitPlugin extends JavaPlugin implements Listener {
             boolean skip = (whitelist == null || whitelist.size() < 1);
             for(Player player : Bukkit.getOnlinePlayers()) {
                 if(skip) {
-                    player.kickPlayer(getKickMessage());
+                    player.kickPlayer(getKickMessage().replaceAll("%newline", "\n"));
                 } else {
                     if (!player.hasPermission("maintenance.bypass")) {
                         if (!whitelist.contains(player.getName())) {
-                            player.kickPlayer(getKickMessage());
+                            player.kickPlayer(getKickMessage().replaceAll("%newline", "\n"));
                         }
                     }
                 }
             }
         } else {
-            kick.kickPlayer(getKickMessage());
+            kick.kickPlayer(getKickMessage().replaceAll("%newline", "\n"));
         }
     }
 
@@ -166,12 +188,16 @@ public class BukkitPlugin extends JavaPlugin implements Listener {
                 // proceed
             }
         }
+        
+        ChangeServerIconInMaintenance = getConfig().getBoolean("ChangeServerIconInMaintenance");
+        
         countdownMessage = getConfig().getString("messages.activation", "&cServer entering maintenance mode in {{ TIME }}");
         whitelist = getConfig().getStringList("whitelist");
         enabled = getConfig().getBoolean("enabled");
         message_motd = getConfig().getString("messages.motd", "&c&lMaintenance Mode");
         message_kick = getConfig().getString("messages.kick", "&cThe server is in maintenance mode, sorry for any inconvenience.");
 
+        protocolMessage = getConfig().getString("serverprotocol", "Maintenance");
         message_motd = colour(message_motd);
         message_kick = colour(message_kick);
     }
@@ -197,6 +223,11 @@ public class BukkitPlugin extends JavaPlugin implements Listener {
         return countdownMessage;
     }
 
+    public String getProtocolMessage() {
+        return protocolMessage;
+    }
+
+    
     /**
      * @return id of the active EnableRunnable
      */
