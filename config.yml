@@ -6,8 +6,6 @@ messages:
     beforemaintenancemotd: ''
 activation:
     countdown: 120
-    announce:
-    - 15
     
 whitelist:
 - md_5
