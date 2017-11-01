@@ -2,8 +2,8 @@ enabled: true
 messages:
     kick: '&cSorry, this server is unavailable. (Maintenance enabled)'
     motd: '&bServer unavailable.'
-    activation: '&cServer will close in 15 seconds. R'
-    beforemaintenancemotd: '&a&lWelcome to your server!%newline Have a seat!'
+    activation: '&cServer will close in 2 minutes (Maintenance)'
+    beforemaintenancemotd: ''
 activation:
     countdown: 120
     announce:
