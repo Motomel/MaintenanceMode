@@ -1,9 +1,9 @@
-enabled: false
+enabled: true
 messages:
-    kick: '&cThe server is in maintenance mode, sorry for any inconvenience.'
-    motd: '&c&lMaintenance Mode'
+    kick: '&cSorry, this server is unavailable. (Maintenance enabled)'
+    motd: '&bServer unavailable.'
     activation: '&cServer entering maintenance mode in {{ TIME }}'
-    beforemaintenancemotd: '&a&lWelcome to our server!%newline Have a seat!'
+    beforemaintenancemotd: '&a&lWelcome to your server!%newline Have a seat!'
 activation:
     countdown: 15
     announce:
@@ -14,9 +14,13 @@ activation:
     - 2
     - 1
 whitelist:
-- ElieTGM
+- md_5
+- Notch
+- Steve
+- Alex
+- YourName
 
-serverprotocol: "Maintenance"
+serverprotocol: "Maintenance enabled!"
 VersionProtocol: true
 motdbeforemaintenance: true
 ChangeServerIconInMaintenance: true
