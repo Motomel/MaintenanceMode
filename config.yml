@@ -2,17 +2,13 @@ enabled: true
 messages:
     kick: '&cSorry, this server is unavailable. (Maintenance enabled)'
     motd: '&bServer unavailable.'
-    activation: '&cServer entering maintenance mode in {{ TIME }}'
+    activation: '&cServer will close in 15 seconds. R'
     beforemaintenancemotd: '&a&lWelcome to your server!%newline Have a seat!'
 activation:
-    countdown: 15
+    countdown: 120
     announce:
     - 15
-    - 5
-    - 4
-    - 3
-    - 2
-    - 1
+    
 whitelist:
 - md_5
 - Notch
@@ -23,4 +19,4 @@ whitelist:
 serverprotocol: "Maintenance enabled!"
 VersionProtocol: true
 motdbeforemaintenance: true
-ChangeServerIconInMaintenance: true
+ChangeServerIconInMaintenance: false
